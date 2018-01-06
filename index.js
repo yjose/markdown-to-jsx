@@ -6,6 +6,7 @@
  */
 const React = require('react');
 const unquote = require('unquote');
+import  {highlight} from './prism/PrismCode.js';
 
 /** TODO: Drop for React 16? */
 const ATTRIBUTE_TO_JSX_PROP_MAP = {
@@ -661,11 +662,11 @@ export function compiler (markdown, options) {
             },
 
             react (node, output, state) {
+                const {content, lang} = node;
+                const html = highlight(content, lang);
                 return (
-                    <pre key={state.key}>
-                        <code className={node.lang ? `lang-${node.lang}` : ''}>
-                            {node.content}
-                        </code>
+                    <pre key={state.key} className={`language-${lang}`} >
+                     <code dangerouslySetInnerHTML={{__html:html}} />
                     </pre>
                 );
             },
